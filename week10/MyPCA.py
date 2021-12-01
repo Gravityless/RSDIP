@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 
 def myPCA(mul, k):
     mul = np.float64(mul)
@@ -19,9 +20,9 @@ def myPCA(mul, k):
 
     # 步骤三 计算特征值和特征向量 np.linalg.eig()
     eig_val, eig_vec = np.linalg.eig(scatter_matrix)
-    eig_pairs = [(np.abs(eig_val[i]), eig_vec[:, i]) for i in range(dim)]
 
     # 步骤四 选择特征向量组成变换矩阵 np.argsort()
+    eig_pairs = [(np.abs(eig_val[i]), eig_vec[:, i]) for i in range(dim)]
     eig_pairs.sort(reverse=True)
 
     # 步骤五 计算主成分分析后的图像 np.dot()
@@ -37,8 +38,14 @@ def myPCA(mul, k):
 
 
 mul = cv2.imread('mul_input.tif', cv2.IMREAD_COLOR)
-
 img = myPCA(mul, 1)
+
+# plt.hist(mul[2].ravel(), 50, [0, 256])
+# plt.title('multiple first band')
+# plt.show()
+plt.hist(img.ravel(), 50, [0, 256])
+plt.title('PCA first band')
+plt.show()
 
 cv2.imshow('this', img)
 cv2.waitKey(0)
